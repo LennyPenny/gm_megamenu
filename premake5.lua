@@ -1,4 +1,4 @@
-solution "my_module"
+solution "gm_megamenu"
 	language		"C++"
 	location		"project"
 	targetdir		"bin"
@@ -8,13 +8,15 @@ solution "my_module"
 	--
 	flags "StaticRuntime"
 
+	architecture "x86"
+
 	configurations { "Release" }
 
 	configuration "Release"
 		flags		"symbols"	-- Generate debugging information
 		optimize	"On"		-- Optimize the build output for size and speed
 
-	project "my_module"
+	project "gm_megamenu"
 		kind	"SharedLib"
 		include	"LuaInterface"
 

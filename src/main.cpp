@@ -1,5 +1,8 @@
 #include "GarrysMod/Lua/Interface.h"
 
+#include "interface.h"
+#include "vtable.h"
+
 using namespace GarrysMod;
 
 int Example(lua_State *state) {
@@ -8,11 +11,12 @@ int Example(lua_State *state) {
 	return 1;
 }
 
+void *luaShared = 0;
+
 GMOD_MODULE_OPEN() {
-	LUA->PushSpecial(Lua::SPECIAL_GLOB);
-	LUA->PushString("Example");
-	LUA->PushCFunction(Example);
-	LUA->SetTable(-3);
+	libsym_return code;
+	luaShared = GetInterface<void *>("lua_shared", "LUASHARED003", &code);
+
 
 	return 0;
 }

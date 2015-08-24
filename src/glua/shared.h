@@ -3,12 +3,6 @@ namespace GarrysMod {
 
 		class Shared {
 		public:
-
-			enum { //offsets
-				CREATELUAINTERFACE= 4,
-				CLOSELUAINTERFACE = 5
-			};
-
 			virtual				~Shared() = 0;
 			virtual void*		Init(void *) = 0;
 			virtual void*		Shutdown(void) = 0;

@@ -1,4 +1,5 @@
 #include "GarrysMod/Lua/Interface.h"
+#include <cstddef>
 
 typedef unsigned int uint;
 
@@ -17,13 +18,19 @@ namespace GarrysMod {
 		class Interface {
 		public:
 
+			typedef std::ptrdiff_t Integer;
+			typedef double Number;
+			typedef int(*Function)(lua_State *L);
+			typedef int Reference;
+
 			lua_State *state;
 
 			enum {
 				CLIENT,
 				SERVER,
 				MENU,
-				RUNSTRINGEX = 107 //offset
+				SETTABLE = 6,
+				RUNSTRINGEX = 106//offset
 			};
 
 			static const char* Names[];
@@ -32,52 +39,52 @@ namespace GarrysMod {
 				return Names[state_id];
 			}
 
-			virtual void* Top(void) = 0;
-			virtual void* Push(int) = 0;
-			virtual void* Pop(int) = 0;
-			virtual void* GetTable(int) = 0;
-			virtual void* GetField(int, char  const*) = 0;
-			virtual void* SetField(int, char  const*) = 0;
-			virtual void* CreateTable(void) = 0;
-			virtual void* SetTable(int) = 0;
-			virtual void* SetMetaTable(int) = 0;
-			virtual void* GetMetaTable(int) = 0;
-			virtual void* Call(int, int) = 0;
-			virtual void* PCall(int, int, int) = 0;
-			virtual void* Equal(int, int) = 0;
-			virtual void* RawEqual(int, int) = 0;
-			virtual void* Insert(int) = 0;
-			virtual void* Remove(int) = 0;
-			virtual void* Next(int) = 0;
-			virtual void* NewUserdata(uint) = 0;
-			virtual void* ThrowError(char  const*) = 0;
-			virtual void* CheckType(int, int) = 0;
-			virtual void* ArgError(int, char  const*) = 0;
-			virtual void* RawGet(int) = 0;
-			virtual void* RawSet(int) = 0;
-			virtual void* GetString(int, uint *) = 0;
-			virtual void* GetNumber(int) = 0;
-			virtual void* GetBool(int) = 0;
-			virtual void* GetCFunction(int) = 0;
-			virtual void* GetUserdata(int) = 0;
-			virtual void* PushNil(void) = 0;
-			virtual void* PushString(char  const*, uint) = 0;
-			virtual void* PushNumber(double) = 0;
-			virtual void* PushBool(bool) = 0;
-			virtual void* PushCFunction(int(*)(lua_State *)) = 0;
-			virtual void* PushCClosure(int(*)(lua_State *), int) = 0;
-			virtual void* PushUserdata(void *) = 0;
-			virtual void* ReferenceCreate(void) = 0;
-			virtual void* ReferenceFree(int) = 0;
-			virtual void* ReferencePush(int) = 0;
-			virtual void* PushSpecial(int) = 0;
-			virtual void* IsType(int, int) = 0;
-			virtual void* GetType(int) = 0;
-			virtual void* GetTypeName(int) = 0;
-			virtual void* CreateMetaTableType(char  const*, int) = 0;
-			virtual void* CheckString(int) = 0;
-			virtual void* CheckNumber(int) = 0;
-			virtual void* ObjLen(int) = 0;
+			virtual int			Top(void) = 0;
+			virtual void		Push(int iStackPos) = 0;
+			virtual void		Pop(int iAmt = 1) = 0;
+			virtual void		GetTable(int iStackPos) = 0;
+			virtual void		GetField(int iStackPos, const char* strName) = 0;
+			virtual void		SetField(int iStackPos, const char* strName) = 0;
+			virtual void		CreateTable() = 0;
+			virtual void		SetTable(int i) = 0;
+			virtual void		SetMetaTable(int i) = 0;
+			virtual bool		GetMetaTable(int i) = 0;
+			virtual void		Call(int iArgs, int iResults) = 0;
+			virtual int			PCall(int iArgs, int iResults, int iErrorFunc) = 0;
+			virtual int			Equal(int iA, int iB) = 0;
+			virtual int			RawEqual(int iA, int iB) = 0;
+			virtual void		Insert(int iStackPos) = 0;
+			virtual void		Remove(int iStackPos) = 0;
+			virtual int			Next(int iStackPos) = 0;
+			virtual void*		NewUserdata(unsigned int iSize) = 0;
+			virtual void		ThrowError(const char* strError) = 0;
+			virtual void		CheckType(int iStackPos, int iType) = 0;
+			virtual void		ArgError(int iArgNum, const char* strMessage) = 0;
+			virtual void		RawGet(int iStackPos) = 0;
+			virtual void		RawSet(int iStackPos) = 0;
+			virtual const char*	GetString(int iStackPos = -1, unsigned int* iOutLen = 0) = 0;
+			virtual double		GetNumber(int iStackPos = -1) = 0;
+			virtual bool		GetBool(int iStackPos = -1) = 0;
+			virtual Function	GetCFunction(int iStackPos = -1) = 0;
+			virtual void*		GetUserdata(int iStackPos = -1) = 0;
+			virtual void		PushNil() = 0;
+			virtual void		PushString(const char* val, unsigned int iLen = 0) = 0;
+			virtual void		PushNumber(double val) = 0;
+			virtual void		PushBool(bool val) = 0;
+			virtual void		PushCFunction(Function val) = 0;
+			virtual void		PushCClosure(Function val, int iVars) = 0;
+			virtual void		PushUserdata(void*) = 0;
+			virtual int			ReferenceCreate() = 0;
+			virtual void		ReferenceFree(int i) = 0;
+			virtual void		ReferencePush(int i) = 0;
+			virtual void		PushSpecial(int iType) = 0;
+			virtual bool		IsType(int iStackPos, int iType) = 0;
+			virtual int			GetType(int iStackPos) = 0;
+			virtual const char*	GetTypeName(int iType) = 0;
+			virtual void		CreateMetaTableType(const char* strName, int iType) = 0;
+			virtual const char*	CheckString(int iStackPos = -1) = 0;
+			virtual double		CheckNumber(int iStackPos = -1) = 0;
+			virtual double		ObjLen(int iStackPos = -1) = 0;
 			virtual void* AddThreadedCall(IThreadedCall *) = 0;
 			virtual void* Init(ILuaCallback *, bool) = 0;
 			virtual void* Shutdown(void) = 0;

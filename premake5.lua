@@ -1,4 +1,4 @@
-solution "gm_megamenu"
+solution "gmsv_megamenu"
 	language		"C++"
 	location		"project"
 	targetdir		"bin"
@@ -16,7 +16,7 @@ solution "gm_megamenu"
 		flags		"symbols"	-- Generate debugging information
 		optimize	"On"		-- Optimize the build output for size and speed
 
-	project "gm_megamenu"
+	project "gmsv_megamenu"
 		kind	"SharedLib"
 		include	"LuaInterface"
 
